@@ -546,8 +546,8 @@ class FakeBackendV2(BackendV2):
                 excited_state_populations = None
             try:
                 delay_pass = RelaxationNoisePass(
-                    t1s=[properties.t1(q) for q in range(num_qubits)], # scale down decoherence error
-                    t2s=[properties.t2(q) for q in range(num_qubits)], # scale down decoherence error
+                    t1s=[properties.t1(q) for q in range(num_qubits)],
+                    t2s=[properties.t2(q) for q in range(num_qubits)],
                     dt=dt,
                     op_types=Delay,
                     excited_state_populations=excited_state_populations,
