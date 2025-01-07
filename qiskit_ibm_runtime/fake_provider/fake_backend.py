@@ -411,7 +411,7 @@ class FakeBackendV2(BackendV2):
             return control_channels_map[qubits]
         return []
 
-    def _setup_sim(self, run_input, **options):  # type: ignore
+    def run(self, run_input, **options):  # type: ignore
         """Run on the fake backend using a simulator.
 
         This method runs circuit jobs (an individual or a list of QuantumCircuit
@@ -516,7 +516,6 @@ class FakeBackendV2(BackendV2):
         # Add single-qubit readout errors
         if readout_error:
             for qubits, error in basic_device_readout_errors(properties):
-                error *= 0.01  # scale down readout error
                 noise_model.add_readout_error(error, qubits)
 
         # Add gate errors
@@ -534,7 +533,6 @@ class FakeBackendV2(BackendV2):
                 temperature=temperature,
             )
         for name, qubits, error in gate_errors:
-            error *= 0.01  # scale down gate error
             noise_model.add_quantum_error(error, name, qubits)
 
         if thermal_relaxation:
@@ -548,8 +546,8 @@ class FakeBackendV2(BackendV2):
                 excited_state_populations = None
             try:
                 delay_pass = RelaxationNoisePass(
-                    t1s=[properties.t1(q) * 100 for q in range(num_qubits)], # scale down decoherence error
-                    t2s=[properties.t2(q) * 100 for q in range(num_qubits)], # scale down decoherence error
+                    t1s=[properties.t1(q) for q in range(num_qubits)], # scale down decoherence error
+                    t2s=[properties.t2(q) for q in range(num_qubits)], # scale down decoherence error
                     dt=dt,
                     op_types=Delay,
                     excited_state_populations=excited_state_populations,
